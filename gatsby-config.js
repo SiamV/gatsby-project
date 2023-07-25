@@ -1,6 +1,10 @@
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
+ require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+
 module.exports = {
   siteMetadata: {
     title: `Мототуры по Мексике`,
@@ -25,6 +29,24 @@ module.exports = {
         "path": "./src/images/"
       },
       __key: "images"
+    },
+    {
+      resolve: `gatsby-source-mysql`,
+      options: {
+        connectionDetails: {
+          host: process.env.DB_HOST,
+          user: process.env.DB_USER,
+          password: process.env.DB_PASSWORD,
+          database: process.env.DB_DATABASE
+        },
+        queries: [
+          {
+            statement: 'SELECT * FROM posts',
+            idFieldName: 'id',
+            name: 'posts'
+          }
+        ]
+      }
     }
   ]
 };
